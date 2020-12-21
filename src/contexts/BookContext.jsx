@@ -1,28 +1,27 @@
-import React, { createContext, useState } from 'react'
-import { v4 as uuidv4 } from 'uuid'
+import React, { createContext, useReducer } from 'react'
+import { BookReducer } from '../reducers/BookReducer'
 
 export const BookContext = createContext()
 
 const BookCotextProvider = (props) => {
-  const [books, setBooks] = useState([
-    { title: '围城', author: '钱钟书', id: 1 },
-    { title: '梦里花落知多少', author: '三毛', id: 2 },
-    { title: '面包树上的女人', author: '张小娴', id: 3 },
+  const [books, dispatch] = useReducer(BookReducer, [
+    { title: '三体', author: '刘慈欣', id: 1 },
+    { title: '红楼梦', author: '曹雪芹', id: 2 }
   ])
 
-  const addBook = (title, author) => {
-    setBooks([...books, { title: title, author: author, id: uuidv4() }])
-  }
-
-  const removeBook = (id) => {
-    setBooks(books.filter(book => book.id !== id))
-  }
-
   return (
-    <BookContext.Provider value={{ books, addBook, removeBook }}>
+    <BookContext.Provider value={{ books, dispatch }}>
       {props.children}
     </BookContext.Provider>
   )
 }
 
 export default BookCotextProvider
+
+/*
+- 创建一个上下文，有两个输出（BookContext和BookContextProvider）
+- 引入useReducer用来减少内部函数的书写，将处理函数写在单独的Reducer中，精简该组件的代码
+- useReducer接收两个参数：BookReducer 初始state数据值，得到books数据值和dispatch函数
+- dispatch函数就是用来解决不同情况需要执行的函数代码集问题
+- 下一步请看BookReducer组件
+*/

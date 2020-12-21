@@ -2,15 +2,14 @@ import React, { useState, useContext } from 'react'
 import { BookContext } from '../contexts/BookContext'
 
 const BookForm = () => {
-  const { addBook } = useContext(BookContext)
+  const { dispatch } = useContext(BookContext)
 
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(title, author)
-    addBook(title, author)
+    dispatch({ type: 'ADD_BOOK', book: { title: title, author: author } })
     setTitle('')
     setAuthor('')
   }
@@ -25,3 +24,9 @@ const BookForm = () => {
 }
 
 export default BookForm
+
+/*
+- 解构BookContex  间接等于引入了BookReducer函数
+- 通过BookContext解构dispatch函数
+- 需要针对的函数功能时，利用dispatch函数来实现，只需提供dispatch函数对应的type,payload即可，即可在BookReducer中执行对应的action函数
+*/
